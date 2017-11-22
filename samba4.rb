@@ -28,9 +28,17 @@ class Samba4 < Formula
 			  "--without-acl-support",
                           "--disable-dependency-tracking",
                           "--disable-silent-rules",
-                          "--prefix=#{prefix}"
+                          "--prefix=#{prefix}",
+                          "--with-configdir=#{prefix}/etc"
     system "make"
     system "make", "install" # if this fails, try separate make/make install steps
+
+    # Install basic example configuration
+    mkdir_p "#{prefix}/etc"
+    inreplace "examples/smb.conf.default" do |s|
+      s.gsub! "/usr/local/samba/var/log.%m", "#{prefix}/var/log/samba/log.%m"
+    end
+    (prefix/"etc").install "examples/smb.conf.default" => "smb.conf"
 
     Dir["#{lib}/private/*[0-9].[0-9]*"].each do |filelib|
       if not File.stat(filelib).symlink? then
