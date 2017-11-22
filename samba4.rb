@@ -37,7 +37,7 @@ class Samba4 < Formula
         basef=File.basename(filelib)
         stripfilename=basef.gsub(/[0-9.]*.dylib/,'.dylib')
 	stripfilename4=basef.gsub(/[0-9.]*.dylib/,'4.dylib')
-        puts "#{lib}/private/#{basef} => #{lib}/private/#{stripfilename}"
+        # puts "#{lib}/private/#{basef} => #{lib}/private/#{stripfilename}"
         ln_sf "#{lib}/private/#{basef}", "#{lib}/private/#{stripfilename}"
 	ln_sf "#{lib}/private/#{basef}", "#{lib}/private/#{stripfilename4}"
       end
