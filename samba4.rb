@@ -9,7 +9,8 @@ class Samba4 < Formula
   sha256 "06e4152ca1cb803f005e92eb6baedb6cc874998b44ee37c2a7819e77a55bfd2c"
 
   conflicts_with "talloc", :because => "both install `include/talloc.h`"
-  #conflicts_with "samba", :because => "both install samba"
+  conflicts_with "samba", :because => "both install samba server/client"
+  conflicts_with "samba3", :because => "both install samba server/client"
 
   depends_on "gnutls"
 
@@ -41,9 +42,6 @@ class Samba4 < Formula
 	ln_sf "#{lib}/private/#{basef}", "#{lib}/private/#{stripfilename4}"
       end
     end
-    #ln_sf "#{lib}/private/libtalloc.2.dylib", "#{lib}/private/libtalloc.dylib"
-    #ln_sf "#{lib}/private/libtevent.0.dylib", "#{lib}/private/libtevent.dylib"
-    #ln_sf "#{lib}/private/libtdb.1.dylib", "#{lib}/private/libtdb.dylib"
   end
 
   test do
