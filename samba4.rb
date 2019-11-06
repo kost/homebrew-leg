@@ -58,40 +58,70 @@ class Samba4 < Formula
 end
 __END__
 
-diff -ur samba-4.7.3/source4/torture/local/nss_tests.c samba-4.7.3-mod/source4/torture/local/nss_tests.c
---- samba-4.7.3/source4/torture/local/nss_tests.c	2017-07-04 12:05:26.000000000 +0200
-+++ samba-4.7.3-mod/source4/torture/local/nss_tests.c	2017-11-22 09:40:40.000000000 +0100
-@@ -343,6 +343,8 @@
- 	char buffer[4096];
- 	int ret;
+
+diff -ur samba-4.7.12/libcli/smbreadline/smbreadline.c samba-4.7.12-mod/libcli/smbreadline/smbreadline.c
+--- samba-4.7.12/libcli/smbreadline/smbreadline.c	2017-07-04 12:05:25.000000000 +0200
++++ samba-4.7.12-mod/libcli/smbreadline/smbreadline.c	2019-11-06 06:49:47.000000000 +0100
+@@ -47,20 +47,22 @@
  
-+#ifdef HAVE_GETPWENT_R
+ static bool smb_rl_done;
+ 
+-#if HAVE_LIBREADLINE
+ /*
++#if HAVE_LIBREADLINE
 +
- 	torture_comment(tctx, "Testing setpwent\n");
- 	setpwent();
+  * MacOS/X does not have rl_done in readline.h, but
+  * readline.so has it
+- */
+ extern int rl_done;
+ #endif
++*/
  
-@@ -379,6 +381,8 @@
- 		*num_pwd_p = num_pwd;
- 	}
- 
-+#endif /* HAVE_GETPWENT_R */
-+
- 	return true;
+ void smb_readline_done(void)
+ {
+	smb_rl_done = true;
+-#if HAVE_LIBREADLINE
++/*#if HAVE_LIBREADLINE
+	rl_done = 1;
+ #endif
++*/
  }
  
-@@ -541,6 +545,7 @@
- 	char buffer[4096];
- 	int ret;
+ /****************************************************************************
+diff -ur samba-4.7.12/source4/torture/local/nss_tests.c samba-4.7.12-mod/source4/torture/local/nss_tests.c
+--- samba-4.7.12/source4/torture/local/nss_tests.c	2017-07-04 12:05:26.000000000 +0200
++++ samba-4.7.12-mod/source4/torture/local/nss_tests.c	2019-11-06 06:48:50.000000000 +0100
+@@ -345,7 +345,7 @@
  
-+#ifdef HAVE_GETGRENT_R
- 	torture_comment(tctx, "Testing setgrent\n");
- 	setgrent();
+	torture_comment(tctx, "Testing setpwent\n");
+	setpwent();
+-
++#ifdef HAVE_GETPWENT_R /* getpwent_r not supported on macOS */
+	while (1) {
+		torture_comment(tctx, "Testing getpwent_r\n");
  
-@@ -576,6 +581,7 @@
- 	if (num_grp_p) {
- 		*num_grp_p = num_grp;
- 	}
-+#endif /* HAVE_GETGRENT_R */
+@@ -368,6 +368,7 @@
+			num_pwd++;
+		}
+	}
++	#endif /* getpwent_r not supported on macOS */
  
- 	return true;
- }
+	torture_comment(tctx, "Testing endpwent\n");
+	endpwent();
+@@ -544,6 +545,7 @@
+	torture_comment(tctx, "Testing setgrent\n");
+	setgrent();
+ 
++	#ifdef HAVE_GETGRENT_R /* getgrent_r not supported on macOS */
+	while (1) {
+		torture_comment(tctx, "Testing getgrent_r\n");
+ 
+@@ -566,6 +568,7 @@
+			num_grp++;
+		}
+	}
++	#endif /* getgrent_r not supported on macOS */
+ 
+	torture_comment(tctx, "Testing endgrent\n");
+	endgrent();
+
