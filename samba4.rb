@@ -5,10 +5,10 @@
 class Samba4 < Formula
   desc "SMB/CIFS file, print, and login server for UNIX"
   homepage "https://www.samba.org/"
-  url "https://download.samba.org/pub/samba/samba-4.7.3.tar.gz"
-  sha256 "06e4152ca1cb803f005e92eb6baedb6cc874998b44ee37c2a7819e77a55bfd2c"
+  url "https://download.samba.org/pub/samba/samba-4.7.12.tar.gz"
+  sha256 "0e9c386bc32983452c5dcafdee561f37e43a411ac1919c864404e6177b1aaf4a"
 
-  conflicts_with "talloc", :because => "both install `include/talloc.h`"
+  # conflicts_with "talloc", :because => "both install `include/talloc.h`"
   conflicts_with "samba", :because => "both install samba server/client"
   conflicts_with "samba3", :because => "both install samba server/client"
 
