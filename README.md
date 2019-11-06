@@ -7,3 +7,8 @@ Add with:
 brew tap kost/homebrew-leg
 ```
 
+Install with:
+```
+brew install samba4
+```
+
