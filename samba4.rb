@@ -28,6 +28,7 @@ class Samba4 < Formula
 			  "--without-acl-support",
                           "--disable-dependency-tracking",
                           "--disable-silent-rules",
+			  "--without-gettext", # _libintl_setlocale", referenced from: _main in net_42.o
                           "--prefix=#{prefix}",
                           "--with-configdir=#{prefix}/etc"
     system "make"
